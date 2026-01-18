@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>Shorten URL</h3>
+
+<form method="POST" class="mb-3">
+  <input class="form-control mb-2" name="url" placeholder="Enter URL" required>
+  <input class="form-control mb-2" name="custom_code" placeholder="Custom short code (optional)">
+  <button class="btn btn-primary">Shorten</button>
+</form>
+
+{% if error %}
+<p class="text-danger">{{ error }}</p>
+{% endif %}
+
+{% if short_url %}
+<div class="input-group mb-4">
+  <input id="short" class="form-control" value="{{ short_url }}" readonly>
+  <button class="btn btn-outline-secondary" onclick="copy()">Copy</button>
+</div>
+{% endif %}
+
+<h4>Your URLs</h4>
+
+<table class="table table-bordered">
+  <tr>
+    <th>Original URL</th>
+    <th>Short URL</th>
+    <th>Clicks</th>
+  </tr>
+  {% for u in urls %}
+  <tr>
+    <td>{{ u.original_url }}</td>
+    <td>
+      <a href="/{{ u.short_code }}">{{ request.host_url }}{{ u.short_code }}</a>
+    </td>
+    <td>{{ u.clicks }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<script src="{{ url_for('static', filename='js/copy.js') }}"></script>
+{% endblock %}
